@@ -2,7 +2,7 @@ import sys
 import cv2
 
 imagePath = sys.argv[1]
-cascPath = sys.argv[2]
+cascPath = "../haarcascades/haarcascade_frontalface_default.xml"
 
 faceCascade = cv2.CascadeClassifier(cascPath)
 
