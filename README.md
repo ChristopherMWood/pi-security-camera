@@ -19,3 +19,15 @@ All facial recognition is done using OpenCV which can be downloaded for both C++
 
 #### C++ vs Python
 I intend to finish this project in both C++ and Python. I started with python since it was easier to make a proof of concept using it. I then went for C++ since it runs magnitudes faster on Raspberry PI hardware which is really important on such a low powered devices doing image processing. If you are using a PI Zero I suggest C++. If you are working on a more powerful system and don't have experience with C/C++, feel free to run the Python version and just do some testing to make sure the video streaming can keep up with the processing requirement and that frames are not dropped or lost. (Hopefully I will explainn more about this when I actually get this running)
+
+#### Save new Person to face directory (create_new_face_database_record.py)
+- [ ] Program param1: directory of saved faces ; param2: name of new face
+- [ ] Show Video Stream and take picture on press of spacebar
+- [ ] Save grayscale image of each face direction profile
+
+#### Convert Face Directory into Face Database CSV (faces_to_csv.py)
+- [ ] Read in directory and build id/profile data
+
+#### Detect Faces from Face database in realtime (saved_faces_recognizer.py)
+- [ ] Load Existing saved faces from CSV
+- [ ] Do more stuff
