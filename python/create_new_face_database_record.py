@@ -1,4 +1,5 @@
 import sys
+from PIL import Image
 import os
 import cv2
 import select
@@ -14,7 +15,7 @@ haarcascade_list = [
 def main(first_name, last_name):
 
 	new_profile_name = first_name.lower() + "_" + last_name.lower()
-	user_directory = "./saved_faces/" + new_profile_name
+	user_directory = "./saved_faces/" + new_profile_name + "/"
 	make_directory(user_directory)
 
 	cascade_path = "../haarcascades/haarcascade_frontalface_default.xml"
@@ -37,7 +38,7 @@ def main(first_name, last_name):
 		if image_captured_with_single_face:
 			save_path = get_file_path(user_directory, new_profile_name, capture_profiles[0], captured_faces)
 			image = video_frame
-			#image = crop_image(video_frame, faces)
+			image = crop_image(image, faces)
 			image = greyscale_image(image)
 			save_image(image, save_path)
 			captured_faces += 1
@@ -59,7 +60,13 @@ def show_image_to_screen(frame, current_profile, image_number):
 	cv2.imshow(program_display_name, frame)
 
 def crop_image(image, faces):
-	return cv2.GetSubRect(image, (0, 0, 200, 200))
+	for (x, y, w, h) in faces:
+		temp_file_location = "./temp_file.png"
+		save_image(image, temp_file_location)
+		temp_image = Image.open(temp_file_location)
+		cropped_image = temp_image.crop((x, y, x + w, y + h))
+		cropped_image.save(temp_file_location, "PNG")
+		return cv2.imread(temp_file_location, cv2.COLOR_RGB2GRAY)
 
 def greyscale_image(image):
 	return cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
@@ -91,6 +98,13 @@ def make_directory(directory):
 
 if __name__ == '__main__':
 	make_directory("saved_faces")
-	new_profile_first_name = "Christopher"
-	new_profile_last_name = "Wood"
-	main(new_profile_first_name, new_profile_last_name)
+	if len(sys.argv) == 3:
+		print("Starting Camera...")
+		new_profile_first_name = sys.argv[1]
+		new_profile_last_name = sys.argv[2]
+		main(new_profile_first_name, new_profile_last_name)
+	else:
+		print("PROGRAM TERMINATED: Required parameters not provided")
+		print("\tParam1: First name of new user")
+		print("\tParam2: Last name of new user")
+		print("Example: python " + sys.argv[0] + " John Doe")
