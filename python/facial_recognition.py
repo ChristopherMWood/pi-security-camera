@@ -2,23 +2,18 @@ import sys
 import cv2
 import time
 
-frames_per_second = 5
+frames_per_second = 20
 frame_length = frames_per_second/1000
-
 current_milliseconds = lambda: int(round(time.time() * 1000))
 
 cascPath = "../haarcascades/haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(cascPath)
-
 videoStream = cv2.VideoCapture(0)
 
-time_difference = 0
-
 while(True):
-	execution_start = current_milliseconds
+	execution_start = current_milliseconds()
 
 	ret, videoFrame = videoStream.read()
-
 	gray = cv2.cvtColor(videoFrame, cv2.COLOR_BGR2GRAY)
 
 	faces = faceCascade.detectMultiScale(
@@ -32,12 +27,9 @@ while(True):
 	for (x, y, w, h) in faces:
 		cv2.rectangle(videoFrame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-	cv2.imshow('frame', videoFrame)
+	cv2.imshow('Live Feed', videoFrame)
 
-	if cv2.waitKey(1) & 0xFF == ord('q'):
-		break
-
-	execution_time = current_milliseconds - execution_start
+	execution_time = current_milliseconds() - execution_start
 
 	if execution_time < frame_length:
 		remaining_frame_time = frame_length - execution_time
