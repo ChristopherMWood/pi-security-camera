@@ -6,6 +6,28 @@ frames_per_second = 20
 frame_length = 1000.0/frames_per_second
 current_milliseconds = lambda: int(round(time.time() * 1000.0))
 
+#-------------GETTING TRAINING CODE READY-------------------------------------------
+training_data, testing_data = prepare_training_testing_data(read_csv())
+
+""" Create dict of label -> matricies from file """
+### for every line, if key exists, insert into dict, else append
+label_dict = {}
+
+for line in training_data:
+    ## split on the ';' in the csv separating filename;label
+    filename, label = line.strip().split(';')
+
+    ##update the current key if it exists, else append to it
+    if label_dict.has_key(int(label)):
+        current_files = label_dict.get(label)
+        numpy.append(current_files,read_matrix_from_file(filename))
+    else:
+        label_dict[int(label)] = read_matrix_from_file(filename) 
+
+recognizer = cv2.createEigenFaceRecognizer()
+label_dict.train(data_dict.values(), numpy.array(data_dict.keys()))
+#-------------ENDING TRAINING CODE -------------------------------------------------
+
 cascPath = "../haarcascades/haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(cascPath)
 videoStream = cv2.VideoCapture(0)
