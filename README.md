@@ -1,6 +1,9 @@
 # HomeSecurityCamera
 Home spun security program for Raspberry PI Zero w/Camera v2 setup
 
+Install link for OpenCV
+http://www.pyimagesearch.com/2015/06/22/install-opencv-3-0-and-python-2-7-on-ubuntu/
+
 Haarcascades and lbpcascades provided by (https://github.com/spmallick/mallick_cascades)
 
 # Home Security Camera
