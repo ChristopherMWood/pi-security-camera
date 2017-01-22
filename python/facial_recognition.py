@@ -41,12 +41,12 @@ def main():
 		prediction_image = get_prediction_formatted_image(videoFrame, faces)
 
 		for (x, y, w, h) in faces:
-			predicted_user, confidence = model.predict(prediction_image)
-			print(str(predicted_user) + " - Confidence: " + str(confidence))
+			predicted_user = model.predict(prediction_image)
+			print(predicted_user)
 
 			predicted_user_output = "Unknown"
-			if predicted_user >= 0:
-				predicted_user_output = saved_users[predicted_user]
+			# if predicted_user >= 0:
+			# 	predicted_user_output = saved_users[predicted_user]
 
 			cv2.putText(videoFrame, predicted_user_output, (x, y - 5), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0))
 			cv2.rectangle(videoFrame, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -79,7 +79,7 @@ def get_prediction_formatted_image(image, faces):
 		cropped_image.save(temp_file_location, "PNG")
 		loaded_cropped_image = cv2.imread(temp_file_location, _CV_COLOR_)
 		temp_image = cv2.resize(loaded_cropped_image, (200, 200))
-		return cv2.cvtColor(temp_image, cv2.COLOR_BGR2GRAY)
+		return cv2.cvtColor(temp_image, _CV_COLOR_)
 
 def save_image(image, path):
 	cv2.imwrite(path, image)
@@ -108,8 +108,6 @@ def create_label_matrix_dict(input_file):
 
 	for line in input_file:
 		filename, username, label = line.strip().split(';')
-		
-		print(filename + " " + username + " " + str(label))
 
 		if not saved_users.has_key(int(label)):
 			saved_users[int(label)] = username
@@ -117,11 +115,11 @@ def create_label_matrix_dict(input_file):
 		##update the current key if it exists, else append to it
 		if label_dict.has_key(int(label)):
 			current_files = label_dict.get(label)
-			numpy.append(current_files,read_matrix_from_file(filename))
+			numpy.append(current_files, read_matrix_from_file(filename))
 		else:
 			label_dict[int(label)] = read_matrix_from_file(filename)
 
-	return label_dict 
+	return label_dict
 
 def split_test_training_data(data, ratio=0.2):
 	""" Split a list of image files by ratio of training:test data """

@@ -94,7 +94,7 @@ def save_image(image, path):
 	print("Saved image to " + path)
 
 def get_file_path(path, username, profile, image_number, extension=".pgm"):
-	return path + username + "_" + profile + "_" + str(image_number) + extension
+	return path + profile + "_" + str(image_number) + extension
 
 def make_directory(directory):
 	if not os.path.exists(directory):
