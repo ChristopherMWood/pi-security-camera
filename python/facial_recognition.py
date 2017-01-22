@@ -47,9 +47,12 @@ def main():
 
 
 def get_training_model():
-	training_data, testing_data = prepare_training_testing_data()
+	#training_data, testing_data = prepare_training_testing_data()
+	csv_file = read_csv()
+	training_data = csv_file.readlines()
 	dictionary = create_label_matrix_dict(training_data)
 	model = cv2.face.createEigenFaceRecognizer()
+	print(numpy.array(dictionary.keys()))
 	model.train(dictionary.values(), numpy.array(dictionary.keys()))
 	return model
 
@@ -72,9 +75,9 @@ def create_label_matrix_dict(input_file):
 
 		if label_dict.has_key(int(label)):
 			current_files = label_dict.get(label)
-			numpy.append(current_files, read_matrix_from_file(filename))
+			numpy.append(current_files, cv2.imread(filename, _CV_COLOR_))
 		else:
-			label_dict[int(label)] = read_matrix_from_file(filename)
+			label_dict[int(label)] = cv2.imread(filename, _CV_COLOR_)
 
 	print(saved_users)
 	return label_dict
@@ -107,12 +110,7 @@ def read_csv(filename='faces.csv'):
 
 def split_test_training_data(data, ratio=0.2):
 	test_size = int(math.floor(ratio*len(data)))
-	random.shuffle(data)
 	return data[test_size:], data[:test_size]
-
-
-def read_matrix_from_file(filename):
-	return cv2.imread(filename, _CV_COLOR_)
 
 
 if __name__ == '__main__':
