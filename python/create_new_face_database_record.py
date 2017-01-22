@@ -4,6 +4,9 @@ import os
 import cv2
 import select
 
+
+_CV_COLOR_ = cv2.COLOR_RGB2GRAY
+
 program_display_name = "New Face Registration"
 user_quit = False
 capture_video_data = True
@@ -61,19 +64,20 @@ def show_image_to_screen(frame, current_profile, image_number):
 
 def crop_image(image, faces):
 	for (x, y, w, h) in faces:
-		temp_file_location = "./temp_file.png"
+		temp_file_location = "./temp/temp_file.png"
 		save_image(image, temp_file_location)
 		temp_image = Image.open(temp_file_location)
 		cropped_image = temp_image.crop((x, y, x + w, y + h))
 		cropped_image.save(temp_file_location, "PNG")
-		return cv2.imread(temp_file_location, cv2.COLOR_RGB2GRAY)
+		loaded_cropped_image = cv2.imread(temp_file_location, _CV_COLOR_)
+		return cv2.resize(loaded_cropped_image, (200, 200))
 
 def greyscale_image(image):
-	return cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+	return cv2.cvtColor(image, _CV_COLOR_)
 
 def find_faces(image, face_cascade):
 	return face_cascade.detectMultiScale(
-		cv2.cvtColor(image, cv2.COLOR_BGR2GRAY),
+		cv2.cvtColor(image, _CV_COLOR_),
 		scaleFactor = 1.1,
 		minNeighbors = 5,
 		minSize = (30, 30),
@@ -89,7 +93,7 @@ def save_image(image, path):
 	cv2.imwrite(path, image)
 	print("Saved image to " + path)
 
-def get_file_path(path, username, profile, image_number, extension=".png"):
+def get_file_path(path, username, profile, image_number, extension=".pgm"):
 	return path + username + "_" + profile + "_" + str(image_number) + extension
 
 def make_directory(directory):
@@ -98,6 +102,7 @@ def make_directory(directory):
 
 if __name__ == '__main__':
 	make_directory("saved_faces")
+	make_directory("temp")
 	if len(sys.argv) == 3:
 		print("Starting Camera...")
 		new_profile_first_name = sys.argv[1]
