@@ -1,5 +1,6 @@
 import sys
 from PIL import Image
+from picamera import PiCamera
 import os
 import cv2
 import select
@@ -23,7 +24,10 @@ def main(first_name, last_name):
 
 	cascade_path = "../haarcascades/haarcascade_frontalface_default.xml"
 	face_cascade = cv2.CascadeClassifier(cascade_path)
-	video_stream = cv2.VideoCapture(0)
+	
+	#video_stream = cv2.VideoCapture(0)
+	camera = PiCamera()
+	camera.start_preview()
 
 	capture_profiles = [ "frontal_face" ]
 
@@ -31,7 +35,10 @@ def main(first_name, last_name):
 
 	while(capture_video_data):
 		key_press = cv2.waitKey(1)
-		ret, video_frame = video_stream.read()
+		#ret, video_frame = video_stream.read()
+		temp_path = './temp.jpg'
+		camera.capture(temp_path)
+		video_frame = cv2.imread(temp_path, _CV_COLOR_)
 
 		faces = find_faces(video_frame, face_cascade)
 		video_frame = bound_found_faces(video_frame, faces)
@@ -52,7 +59,8 @@ def main(first_name, last_name):
 
 		show_image_to_screen(video_frame, face_profiles_list[0], captured_faces)
 
-	video_stream.release()
+	#video_stream.release()
+	camera.stop_preview()
 	print("Stream Exited")
 
 def show_image_to_screen(frame, current_profile, image_number):
