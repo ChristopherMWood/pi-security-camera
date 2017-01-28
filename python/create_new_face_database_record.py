@@ -4,6 +4,7 @@ from picamera import PiCamera
 import os
 import cv2
 import select
+import time
 
 
 _CV_COLOR_ = cv2.COLOR_RGB2GRAY
@@ -34,11 +35,16 @@ def main(first_name, last_name):
 
 	captured_faces = 0
 
+	current_milli_time = lambda: int(round(time.time() * 1000))
+	start_time = current_milli_time
+	pictures_taken = 0
+
 	while(capture_video_data):
 		key_press = cv2.waitKey(1)
 		#ret, video_frame = video_stream.read()
 		temp_path = './temp.jpg'
 		camera.capture(temp_path)
+		pictures_taken += 1
 		video_frame = cv2.imread(temp_path, _CV_COLOR_)
 
 		faces = find_faces(video_frame, face_cascade)
@@ -57,6 +63,12 @@ def main(first_name, last_name):
 		if key_press == 27 or captured_faces >= 10:
 			user_quit = True
 			break;
+
+		execution_time = current_milli_time - start_time
+		if execution_time >= 1000
+			print(pictures_taken)
+			pictures_taken = 0
+			start_time = current_milli_time
 
 		#show_image_to_screen(video_frame, face_profiles_list[0], captured_faces)
 
