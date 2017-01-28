@@ -36,7 +36,7 @@ def main(first_name, last_name):
 	captured_faces = 0
 
 	current_milli_time = lambda: int(round(time.time() * 1000))
-	start_time = current_milli_time
+	start_time = current_milli_time()
 	pictures_taken = 0
 
 	while(capture_video_data):
@@ -64,11 +64,11 @@ def main(first_name, last_name):
 			user_quit = True
 			break;
 
-		execution_time = current_milli_time - start_time
+		execution_time = current_milli_time() - start_time
 		if execution_time >= 1000:
 			print(pictures_taken)
 			pictures_taken = 0
-			start_time = current_milli_time
+			start_time = current_milli_time()
 
 		#show_image_to_screen(video_frame, face_profiles_list[0], captured_faces)
 
