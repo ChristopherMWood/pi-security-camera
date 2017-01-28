@@ -47,18 +47,18 @@ def main(first_name, last_name):
 		pictures_taken += 1
 		video_frame = cv2.imread(temp_path, _CV_COLOR_)
 
-		# faces = find_faces(video_frame, face_cascade)
-		# video_frame = bound_found_faces(video_frame, faces)
+		faces = find_faces(video_frame, face_cascade)
+		video_frame = bound_found_faces(video_frame, faces)
 
-		# image_captured_with_single_face = (key_press == 32 and len(faces) == 1)
+		image_captured_with_single_face = (key_press == 32 and len(faces) == 1)
 
-		# if image_captured_with_single_face:
-		# 	save_path = get_file_path(user_directory, new_profile_name, capture_profiles[0], captured_faces)
-		# 	image = video_frame
-		# 	image = crop_image(image, faces)
-		# 	image = greyscale_image(image)
-		# 	save_image(image, save_path)
-		# 	captured_faces += 1
+		if image_captured_with_single_face:
+			save_path = get_file_path(user_directory, new_profile_name, capture_profiles[0], captured_faces)
+			image = video_frame
+			image = crop_image(image, faces)
+			image = greyscale_image(image)
+			save_image(image, save_path)
+			captured_faces += 1
 		
 		if key_press == 27 or captured_faces >= 10:
 			user_quit = True
