@@ -27,6 +27,7 @@ def main(first_name, last_name):
 	
 	#video_stream = cv2.VideoCapture(0)
 	camera = PiCamera()
+	camera.resolution = (1024, 768)
 	camera.start_preview()
 
 	capture_profiles = [ "frontal_face" ]
@@ -57,7 +58,7 @@ def main(first_name, last_name):
 			user_quit = True
 			break;
 
-		show_image_to_screen(video_frame, face_profiles_list[0], captured_faces)
+		#show_image_to_screen(video_frame, face_profiles_list[0], captured_faces)
 
 	#video_stream.release()
 	camera.stop_preview()
