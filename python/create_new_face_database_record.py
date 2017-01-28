@@ -65,7 +65,7 @@ def main(first_name, last_name):
 			break;
 
 		execution_time = current_milli_time - start_time
-		if execution_time >= 1000
+		if execution_time >= 1000:
 			print(pictures_taken)
 			pictures_taken = 0
 			start_time = current_milli_time
